@@ -1,8 +1,12 @@
 (in-package :helpers)
 
+(defvar *current-dir* nil)
+
 (defun get-current-load-path (file-load-path)
-  (let ((load-path-name (format nil "~a" file-load-path)))
-    (string-trim (first (last (split-sequence:split-sequence #\/ load-path-name))) load-path-name)))
+  (let ((load-path-name (format nil "~a" file-load-path))
+	(curr-load-path (string-trim (first (last (split-sequence:split-sequence #\/ load-path-name))) load-path-name)))
+    (setf *current-dir* curr-load-path)
+    curr-load-path))
 
 
 ;; compiles and loads a lisp source file.
