@@ -4,4 +4,5 @@
   (:use :common-lisp :split-sequence)
   (:export :get-current-load-path
 	   :compile-and-load
-	   :as-string-list))
+	   :as-string-list
+	   :ensure-type))

@@ -20,3 +20,18 @@
     `(list ,@(loop for f in filenames collecting `(string-downcase (string ',f)))))
 
 
+;; führt body solange aus, wie alle variablen in variables nicht vom typ type sind.
+(defmacro ensure-type ((type (&rest variables)) &body body)
+  (let* ((type-name (if (equal type 'string)
+			'symbol
+			type))
+	 (type-fn (intern (concatenate 'string (string-upcase type-name) "P"))))
+    `(progn
+       ,@body
+       (loop while (or ,@(loop for v in variables
+			    collect `(not (,type-fn ,v)))) do
+	  ;; fehlermeldung ausgeben, dass typ nicht korrekt ist
+	    (format t "~a~%" (concatenate 'string "falscher typ (" ,(string type) ") für variablen: "
+					  ,@(loop for v in variables
+					       collect `,(concatenate 'string (string v) " "))))
+	    ,@body))))
